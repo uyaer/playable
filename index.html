@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playable Games</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+        
+        .game-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .game-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to top right, rgba(255,255,255,1) 0%, rgba(255,255,255,0.7) 25%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.3) 75%, rgba(255,255,255,0) 100%), url('001shoot/icon.png') center/cover no-repeat;
+        }
+        
+        .game-card:hover .game-image {
+            background: url('001shoot/icon.png') center/cover no-repeat;
+        }
+        
+        .game-info {
+            padding: 20px;
+        }
+        
+        .game-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .game-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .play-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .play-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Playable Games</h1>
+            <p class="subtitle">体验我们精选的可玩小游戏集合</p>
+        </header>
+        
+        <div class="games-grid" id="gamesContainer">
+            <!-- 游戏卡片将通过JavaScript动态生成 -->
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 Playable Games Collection. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // 游戏数据
+        const games = [
+            {
+                id: '001shoot',
+                title: '射击游戏',
+                description: '体验刺激的射击游戏，挑战你的反应速度和精准度。多种武器和敌人等待你的挑战。'
+            },
+            {
+                id: '002puzzle',
+                title: '益智游戏',
+                description: '锻炼大脑的益智游戏，通过解决各种难题来提升你的逻辑思维能力。'
+            },
+            {
+                id: '003racing',
+                title: '赛车游戏',
+                description: '感受速度与激情的赛车游戏，在各种赛道上展现你的驾驶技巧。'
+            },
+            {
+                id: '004adventure',
+                title: '冒险游戏',
+                description: '探索未知世界的冒险游戏，发现隐藏的宝藏和秘密。'
+            },
+            {
+                id: '005arcade',
+                title: '街机游戏',
+                description: '经典的街机游戏体验，简单易上手但难以精通。'
+            },
+            {
+                id: '006strategy',
+                title: '策略游戏',
+                description: '考验智慧的策略游戏，制定完美的计划来击败对手。'
+            }
+        ];
+
+        // 渲染游戏卡片
+        function renderGames() {
+            const container = document.getElementById('gamesContainer');
+            
+            // 只展示第一个游戏（射击游戏）
+            const game = games[0];
+            const gameCard = document.createElement('div');
+            gameCard.className = 'game-card';
+            
+            // 检查游戏目录是否存在
+            const gameExists = game.id === '001shoot'; // 目前只有这个目录存在
+            
+            gameCard.innerHTML = `
+                <div class="game-image"></div>
+                <div class="game-info">
+                    <h3 class="game-title">${game.title}</h3>
+                    <p class="game-description">${game.description}</p>
+                    ${gameExists ? 
+                        `<a href="${game.id}/index.html" class="play-button">开始游戏</a>` : 
+                        `<button class="play-button" disabled style="opacity: 0.5;">敬请期待</button>`
+                    }
+                </div>
+            `;
+            
+            container.appendChild(gameCard);
+        }
+
+        // 页面加载完成后渲染游戏
+        document.addEventListener('DOMContentLoaded', renderGames);
+    </script>
+</body>
+</html>
